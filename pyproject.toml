@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "meta-deep-hedging"
+version = "0.1.0"
+description = "Anonymous source code accompanying the Meta Deep Hedging paper"
+readme = "README.md"
+requires-python = ">=3.10,<3.14"
+dependencies = [
+  "numpy>=1.24,<3", "pandas>=2.2,<3", "pyarrow>=25,<26",
+  "scipy>=1.10,<2", "torch>=2.1,<3", "gymnasium>=0.29,<2",
+  "ruptures>=1.1.9,<2", "tqdm>=4.66,<5", "python-dotenv>=1,<2",
+  "matplotlib>=3.7,<4", "scikit-learn>=1.3,<2"
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8,<10"]
+wrds = ["wrds>=3.5,<4"]
+
+[project.scripts]
+market-option-data = "market_data.cli:main"
+sx5e-option-data = "sx5e.__main__:main"
+
+[tool.setuptools]
+py-modules = ["rl_agents", "rl_utils", "data_source", "run_seg", "run_sim",
+  "train_basis", "test_basis", "train_meta", "test_meta", "test_delta",
+  "train_no_meta", "test_no_meta", "train_no_simulation", "test_no_simulation",
+  "configure_experiment"]
+packages = ["market_data", "sx5e", "option_dataset", "hedging_env",
+  "market_segmentation", "market_simulation", "hedging_meta_rl",
+  "no_meta_variant", "no_simulation_variant"]
+
+[tool.setuptools.package-dir]
+market_data = "data_processing/market_data"
+sx5e = "data_processing/sx5e"
+option_dataset = "datasets/option_dataset"
+hedging_env = "rl_envs/hedging_env"
+market_segmentation = "segmentation/market_segmentation"
+market_simulation = "simulation/market_simulation"
+hedging_meta_rl = "meta_rl/hedging_meta_rl"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--import-mode=importlib -p no:cacheprovider"
+markers = ["integration: requires an externally supplied real market dataset"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
